@@ -2,6 +2,7 @@ import random
 from flask import Flask, request, render_template
 import voteredis as vr
 import os
+import json
 
 
 app = Flask(__name__)
@@ -48,8 +49,16 @@ def vote():
     if pv:
         pv_num = vr.get_votes(POLL, pv)
 
-    return render_template('index.html', hostname=HOSTNAME, vote_opts=get_vote_options(POLL_OPTIONS), previous_vote=pv,
-                           previous_vote_num=pv_num)
+    poll_opts = sorted(vr.get_poll_options(POLL))
+
+    poll_values = [vr.get_votes(POLL, option) for option in poll_opts]
+
+    print poll_opts, poll_values
+
+    return render_template('index.html', hostname=HOSTNAME, poll_name=POLL, vote_opts=get_vote_options(POLL_OPTIONS),
+                           previous_vote=pv, previous_vote_num=pv_num,
+                           poll_opts=json.dumps(poll_opts),
+                           poll_values=json.dumps(poll_values))
 
 @app.route("/flushdb", methods=['GET'])
 def flush():
