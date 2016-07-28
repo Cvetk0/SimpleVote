@@ -51,6 +51,12 @@ def vote():
     return render_template('index.html', hostname=HOSTNAME, vote_opts=get_vote_options(POLL_OPTIONS), previous_vote=pv,
                            previous_vote_num=pv_num)
 
+@app.route("/flushdb", methods=['GET'])
+def flush():
+    vr.flush_redis_db()
+
+    return "Flushed redis DB"
+
 
 if __name__ == '__main__':
     vr.vote_init(POLL, POLL_OPTIONS)
