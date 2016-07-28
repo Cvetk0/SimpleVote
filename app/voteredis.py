@@ -1,10 +1,9 @@
 import redis
 import os
 
-R_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
-R_PORT = os.getenv('REDIS_PORT', 6379)
-R_DB_NUM = os.getenv('REDIS_DB', 0)
-R_FLUSH_DB = os.getenv('REDIS_FLUSH', False)
+R_HOST = str(os.getenv('R_HOST', '127.0.0.1'))
+R_PORT = int(os.getenv('R_PORT', 6379))
+R_DB_NUM = int(os.getenv('R_DB', 0))
 
 
 def get_redis():
@@ -20,9 +19,6 @@ def flush_redis_db():
 
 def vote_init(poll_name, poll_options):
     r = get_redis()
-
-    if R_FLUSH_DB:
-        flush_redis_db()
     
     polls = r.smembers('vote:polls')
 
@@ -50,6 +46,9 @@ def cast_vote(poll_name, poll_option):
     print "Incrementing value of vote:" + poll_name + ":option:" + poll_option + " by 1"
     r.incr('vote:' + poll_name + ':option:' + poll_option)
 
+    set_last_vote(poll_name, poll_option)
+
+
 def set_last_vote(poll_name, poll_option):
     r = get_redis()
 
@@ -73,6 +72,12 @@ def get_votes(poll_name, poll_option):
     r = get_redis()
 
     return r.get('vote:' + poll_name + ':option:' + poll_option)
+
+
+def last_vote(poll_name):
+    r = get_redis()
+
+    return r.get('vote:' + poll_name + ':lastvote')
 
 
 if __name__ == '__main__':

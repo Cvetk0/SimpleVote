@@ -27,12 +27,16 @@
                     </div>
                 </form>
             </div>
-            {% if previous_vote %}
+
                 <br>
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3" align="center">Previous vote was cast for {{ previous_vote | capitalize() }}, it now has {{ previous_vote_num }} vote(s).</div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" align="center">
+                    {% if previous_vote %}
+                        Previous vote was cast for {{ previous_vote | capitalize() }}, it now has {{ previous_vote_num }} vote(s).<br><br>
+                    {% endif %}
+                    Current host: {{ hostname }}
                 </div>
-            {% endif %}
+            </div>
         </div>
     </body>
 </html>

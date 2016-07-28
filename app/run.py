@@ -1,13 +1,19 @@
 import random
 from flask import Flask, request, render_template
 import voteredis as vr
+import os
 
 
 app = Flask(__name__)
 
-POLL = 'animals'
-POLL_OPTIONS = {'dog', 'cat', 'lion', 'goat', 'chupacabra', 'colibry', 'shark', 'buffalo', 'otter', 'eagle', 'giraffe',
-                'rabbit', 'mouse', 'squid'}
+POLL = os.getenv('POLL_NAME', 'animals')
+if os.getenv('POLL_OPTS'):
+    POLL_OPTIONS = os.getenv('POLL_OPTS').split(',')
+else:
+    POLL_OPTIONS = {'dog', 'cat', 'lion', 'goat', 'chupacabra', 'colibry', 'shark', 'buffalo', 'otter', 'eagle',
+                    'giraffe', 'rabbit', 'mouse', 'squid'}
+
+HOSTNAME = os.getenv('HOSTNAME', 'Unknown')
 
 
 def get_random_set_item(options_set):
@@ -32,16 +38,17 @@ def get_redis():
 
 @app.route("/", methods=['GET', 'POST'])
 def vote():
-    pv = None
+    if request.method == 'POST':
+        vote_for = request.form['vote_option'].lower()
+        vr.cast_vote(POLL, vote_for)
+
+    pv = vr.last_vote(POLL)
     pv_num = 0
 
-    if request.method == 'POST':
-        vote = request.form['vote_option'].lower()
-        vr.cast_vote(POLL, vote)
-        pv = vote
-        pv_num = vr.get_votes(POLL, vote)
+    if pv:
+        pv_num = vr.get_votes(POLL, pv)
 
-    return render_template('index.html', vote_opts=get_vote_options(POLL_OPTIONS), previous_vote=pv,
+    return render_template('index.html', hostname=HOSTNAME, vote_opts=get_vote_options(POLL_OPTIONS), previous_vote=pv,
                            previous_vote_num=pv_num)
 
 
