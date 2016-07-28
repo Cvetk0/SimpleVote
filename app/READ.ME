@@ -1,0 +1,18 @@
+REDIS STRUCTURE FOR VOTE APP
+============================
+
+== Datastructure definitions
+pollname -> name of the poll, animals, cars, planes...
+
+vote:polls => SET -> all pollname('s) that have been initialized in redis DB
+vote:pollname:options => SET -> all options that can be voted on
+vote:pollname:option:option_name => INTEGER -> number of votes for that option
+
+
+== Application flow
+- App is initialized on start:
+  * Check vote:polls if pollname already exists, if not add it
+  * Check vote:pollname:options and add any options that do not yet exist.  For each option added also initialize vote:pollname:option:option_name to 0
+ 
+- Vote is cast:
+  * Increment vote:pollname:option:option_name by one

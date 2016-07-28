@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% set vote_a = vote_opts.get('A') | upper() %}
+{% set vote_b = vote_opts.get('B') | upper() %}
+<html>
+    <head>
+        <title>Vote for {{ vote_a }} or {{ vote_b }}</title>
+
+       	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    </head>
+    <body>
+        <div class="container">
+            <br><br>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" align="center" style="font-size: 25px; font-weight: bold">
+                    CAST THE VOTE!
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <form name="vote" action="/" method="post">
+                    <div class="col-md-3 col-md-offset-3" align="center">
+                        <button class="btn btn-primary btn-lg" style="width: 200px" type="submit" name="vote_option" value="{{ vote_a }}">{{ vote_a }}</button>
+                    </div>
+                    <div class="col-md-3" align="center">
+                        <button class="btn btn-success btn-lg" style="width: 200px" type="submit" name="vote_option" value="{{ vote_b }}">{{ vote_b }}</button>
+                    </div>
+                </form>
+            </div>
+            {% if previous_vote %}
+                <br>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3" align="center">Previous vote was cast for {{ previous_vote | capitalize() }}, it now has {{ previous_vote_num }} vote(s).</div>
+                </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
