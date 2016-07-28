@@ -63,6 +63,7 @@ def vote():
 @app.route("/flushdb", methods=['GET'])
 def flush():
     vr.flush_redis_db()
+    vr.vote_init(POLL, POLL_OPTIONS)
 
     return "Flushed redis DB"
 
