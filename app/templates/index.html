@@ -51,6 +51,17 @@
                     type: "bar",
                     data: barData,
                     options: {
+                        title: {
+                            display: true,
+                            text: "Results of voting on {{ poll_name | lower }} so far",
+                            padding: 20
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            enabled: true
+                        },
                         scales: {
                             yAxes: [{
                                 ticks: {
