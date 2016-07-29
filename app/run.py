@@ -53,8 +53,6 @@ def vote():
 
     poll_values = [vr.get_votes(POLL, option) for option in poll_opts]
 
-    print poll_opts, poll_values
-
     return render_template('index.html', hostname=HOSTNAME, poll_name=POLL, vote_opts=get_vote_options(POLL_OPTIONS),
                            previous_vote=pv, previous_vote_num=pv_num,
                            poll_opts=json.dumps(poll_opts),
