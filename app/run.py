@@ -4,6 +4,7 @@ import voteredis as vr
 import os
 import json
 
+PORT = int(os.getenv('PORT', 5000))
 
 app = Flask(__name__)
 
@@ -68,4 +69,4 @@ def flush():
 
 if __name__ == '__main__':
     vr.vote_init(POLL, POLL_OPTIONS)
-    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True, threaded=True)
