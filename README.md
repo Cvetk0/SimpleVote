@@ -3,6 +3,8 @@ SimpleVote application for demoing Docker
 
 Environment variables that can be used when running container
 ----
+PORT -> Flask bind port
+
 POLL -> poll name
 
 POLL_OPTS -> coma separated list of poll options
